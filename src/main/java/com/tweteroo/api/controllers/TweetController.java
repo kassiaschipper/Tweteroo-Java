@@ -3,11 +3,14 @@ package com.tweteroo.api.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,25 +20,23 @@ import com.tweteroo.api.services.TweetService;
 
 import jakarta.validation.Valid;
 
-
 @RestController
 @RequestMapping("/tweets")
 public class TweetController {
-    
+
     @Autowired
-    private TweetService service; 
+    private TweetService service;
 
     @ResponseStatus(value = HttpStatus.CREATED)
-    @PostMapping    
-    public void create(@RequestBody @Valid TweetDTO req){
+    @PostMapping
+    public String create(@RequestBody @Valid TweetDTO req) {
         service.create(new Tweet(req));
+        return "Ok";
     }
 
     @GetMapping
-    public List<Tweet> getAll() {
-        return service.findAll();
+    public Page<Tweet> getAll(@PageableDefault(page = 0, size = 5) @RequestParam String page) {
+        return service.findAll(page);
     }
-    
-        
-}
 
+}
