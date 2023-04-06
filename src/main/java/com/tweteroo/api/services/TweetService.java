@@ -1,9 +1,13 @@
 package com.tweteroo.api.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.data.domain.Page;
 
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -24,8 +28,14 @@ public class TweetService {
         int page= Integer.parseInt(paging);
         int size=5;
 
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.DESC, "id");
+        Pageable pageRequest = PageRequest.of(page, size, Sort.Direction.DESC, "id");
         return repository.findAll(pageRequest);
     }
+
+    public List<Tweet> findByUsername(String username){
+         return repository.findByUsername(username);
+    }
+
+
   
 }

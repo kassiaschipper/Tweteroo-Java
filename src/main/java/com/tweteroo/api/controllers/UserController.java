@@ -26,7 +26,8 @@ public class UserController {
 
     @ResponseStatus(value = HttpStatus.CREATED)
     @PostMapping
-    public void create(@RequestBody @Valid UserDTO req){
+    public String create(@RequestBody @Valid UserDTO req){
         service.create(new Users(req));
+        return "Ok";
     }
 }
