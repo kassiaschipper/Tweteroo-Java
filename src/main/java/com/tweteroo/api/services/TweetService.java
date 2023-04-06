@@ -1,7 +1,6 @@
 package com.tweteroo.api.services;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -41,7 +40,6 @@ public class TweetService {
     }
 
     public Page<Tweet>findAll(String paging ){
-        //int page= paging != null ? Integer.parseInt(String paging) : 0;
         int page= Integer.parseInt(paging);
         int size=5;
 
@@ -49,7 +47,7 @@ public class TweetService {
         return repository.findAll(pageRequest);
     }
 
-    public Optional<Tweet> findByUsername(String username){
+    public List<Tweet> findByUsername(String username){
          return repository.findByUsername(username);
     }
 
