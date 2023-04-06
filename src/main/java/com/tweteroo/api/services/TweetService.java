@@ -1,6 +1,7 @@
 package com.tweteroo.api.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -12,7 +13,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.tweteroo.api.models.Tweet;
+import com.tweteroo.api.models.Users;
 import com.tweteroo.api.repositories.TweetRepository;
+import com.tweteroo.api.repositories.UserRepository;
 
 @Service
 public class TweetService {
@@ -20,11 +23,25 @@ public class TweetService {
     @Autowired
     private TweetRepository repository;
 
-    public void create(Tweet data) {
-        repository.save(data);
+    @Autowired
+    private UserRepository userRepository;
+
+    public boolean create(Tweet data) {
+        List <Users> user = userRepository.findByUsername(data.getUsername());
+
+        if(user.size() >= 1){            
+            data.setAvatar(user.get(0).getAvatar());
+            repository.save(data);
+            return true;
+        
+        }
+       
+        return false;
+      
     }
 
-    public Page<Tweet>findAll(String paging){
+    public Page<Tweet>findAll(String paging ){
+        //int page= paging != null ? Integer.parseInt(String paging) : 0;
         int page= Integer.parseInt(paging);
         int size=5;
 
@@ -32,7 +49,7 @@ public class TweetService {
         return repository.findAll(pageRequest);
     }
 
-    public List<Tweet> findByUsername(String username){
+    public Optional<Tweet> findByUsername(String username){
          return repository.findByUsername(username);
     }
 
